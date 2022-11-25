@@ -38,27 +38,22 @@ def discovery(UDPsensor):
 
 def pi_sensor(i):
     localIP = "127.0.0.1"
-    localPort = i
+    localPort = i[0]
     bufferSize = 1024
-    msgFromSensor = "Hello UDP Client from Port: " + str(i)
-    bytesToSend = str.encode(msgFromSensor)
     UDPsensor=socket.socket(family=socket.AF_INET,type=socket.SOCK_DGRAM)
     UDPsensor.bind((localIP,localPort))
-    print("UDP snsor up and listening in port "+str(i))
+    print("UDP snsor up and listening in port "+str(i[0]))
     discovery(UDPsensor)
     while(True):
         bytesAddressPair=UDPsensor.recvfrom(bufferSize)
         message=bytesAddressPair[0]
         address=bytesAddressPair[1]
-        clientMsg="MessagefromClient:{}".format(message)
-        clientIP="ClientIPAddress:{}".format(address)
-        print(clientMsg)
-        print(clientIP)
-        msgFromServer = sensorData(clientMsg)
+        clientMsg = message.decode("utf-8")
+        msgFromServer = i[1]+"\n"+sensorData(clientMsg)
         bytesToSend = str.encode(msgFromServer)
         UDPsensor.sendto(bytesToSend,address)
 
-for i in [20001,20002,20003,20005,20006]:
+for i in [[20001,'Bob'],[20002,'Alice'],[20003,'Eve'],[20005,'John'],[20006,'Ben']]:
     logging.info("Main    : create and start thread %d.", i)
     x = threading.Thread(target=pi_sensor, args=(i,))
     x.start()

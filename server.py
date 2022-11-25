@@ -9,6 +9,7 @@ def sensorData(clientMsg):
     clientMsg = clientMsg.lower()
     clientMsg = clientMsg.replace(" ","")
     clientMsg = clientMsg.split('/') 
+    print(clientMsg)
     sensorValue = ""
     if "temperature" in clientMsg:
         sensorValue += "Temperature : "+str(random.randint(35, 40)) +"\n"
@@ -27,6 +28,7 @@ def sensorData(clientMsg):
     if "bloodsugar" in clientMsg:
         sensorValue += "Blood Sugar "+str(random.randint(89, 93))+"\n"
 
+    print("SensorValue:",sensorValue)
     return sensorValue
 
 
