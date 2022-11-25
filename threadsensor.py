@@ -5,55 +5,55 @@ import time
 import socket
 import random
 
-def sensorData(clientMsg):
+def sensorData(clientMsg,i):
     clientMsg = clientMsg.lower()
     clientMsg = clientMsg.replace(" ","")
     clientMsg = clientMsg.split('/') 
-    sensorValue = ""
+    sensorValue = "resource/"+i+"/"
     if "temperature" in clientMsg:
-        sensorValue += "Temperature : "+str(random.randint(35, 40)) +"\n"
+        sensorValue += "Temperature/"+str(random.randint(35, 40)) +"/"
     if "pressure" in clientMsg:
-        sensorValue += "Pressure : "+str(random.randint(76, 84))+"\n"
+        sensorValue += "Pressure/"+str(random.randint(76, 84))+"/"
     if "speed" in clientMsg:
-        sensorValue += "Speed : "+str(random.randint(0, 5))+"\n"
+        sensorValue += "Speed/"+str(random.randint(0, 5))+"/"
     if "surroundingtemperature" in clientMsg:
-        sensorValue += "Surrounding Temperature : "+str(random.randint(5, 10))+"\n"
+        sensorValue += "Surrounding Temperature/"+str(random.randint(5, 10))+"/"
     if "bloodoxygenlevel" in clientMsg:
-        sensorValue += "Blood oxygen level : "+str(random.randint(80, 100))+"\n"
+        sensorValue += "Blood oxygen level/"+str(random.randint(80, 100))+"/"
     if "heartbeat" in clientMsg:
-        sensorValue += "Heart Beat : "+str(random.randint(75, 80))+"\n"
+        sensorValue += "Heart Beat/"+str(random.randint(75, 80))+"/"
     if "hydration" in clientMsg:
-        sensorValue += "Hydration : "+str(random.randint(69, 73))+"\n"
+        sensorValue += "Hydration/"+str(random.randint(69, 73))+"/"
     if "bloodsugar" in clientMsg:
-        sensorValue += "Blood Sugar "+str(random.randint(89, 93))+"\n"
+        sensorValue += "Blood Sugar/"+str(random.randint(89, 93))+"/"
 
     return sensorValue
 
-def discovery(UDPsensor):
-    # print(UDPsensor) 
-    bytesToSend = str.encode("discovery")
+def discovery(UDPsensor,i):
+    bytesToSend = str.encode("discovery/"+i)
     routerAddressPort = ("127.0.0.1", 20007)
     UDPsensor.sendto(bytesToSend,routerAddressPort)
 
 
 def pi_sensor(i):
-    localIP = "127.0.0.1"
+    hostname = socket.gethostname()
+    localIP = socket.gethostbyname(hostname)
     localPort = i[0]
     bufferSize = 1024
     UDPsensor=socket.socket(family=socket.AF_INET,type=socket.SOCK_DGRAM)
     UDPsensor.bind((localIP,localPort))
     print("UDP snsor up and listening in port "+str(i[0]))
-    discovery(UDPsensor)
+    discovery(UDPsensor,i[1])
     while(True):
         bytesAddressPair=UDPsensor.recvfrom(bufferSize)
         message=bytesAddressPair[0]
         address=bytesAddressPair[1]
         clientMsg = message.decode("utf-8")
-        msgFromServer = i[1]+"\n"+sensorData(clientMsg)
+        msgFromServer = i[1]+"\n"+sensorData(clientMsg,i[1])
         bytesToSend = str.encode(msgFromServer)
         UDPsensor.sendto(bytesToSend,address)
 
-for i in [[20001,'Bob'],[20002,'Alice'],[20003,'Eve'],[20005,'John'],[20006,'Ben']]:
+for i in [[33000,'Bob'],[34000,'Alice'],[35000,'Eve'],[36000,'John'],[37000,'Ben']]:
     logging.info("Main    : create and start thread %d.", i)
     x = threading.Thread(target=pi_sensor, args=(i,))
     x.start()
