@@ -15,19 +15,19 @@ def sensorData(clientMsg, i):
     if "temperature" in clientMsg:
         sensorValue += "Temperature," + str(random.randint(35, 40))
     if "pressure" in clientMsg:
-        sensorValue += "Pressure/" + str(random.randint(76, 84)) + "/"
+        sensorValue += "Pressure," + str(random.randint(76, 84))
     if "speed" in clientMsg:
-        sensorValue += "Speed/" + str(random.randint(0, 5)) + "/"
+        sensorValue += "Speed," + str(random.randint(0, 5))
     if "surroundingtemperature" in clientMsg:
-        sensorValue += "Surrounding Temperature/" + str(random.randint(5, 10)) + "/"
+        sensorValue += "Surrounding Temperature," + str(random.randint(5, 10))
     if "bloodoxygenlevel" in clientMsg:
-        sensorValue += "Blood oxygen level/" + str(random.randint(80, 100)) + "/"
+        sensorValue += "Blood oxygen level," + str(random.randint(80, 100))
     if "heartbeat" in clientMsg:
-        sensorValue += "Heart Beat/" + str(random.randint(75, 80)) + "/"
+        sensorValue += "Heart Beat," + str(random.randint(75, 80)) 
     if "hydration" in clientMsg:
-        sensorValue += "Hydration/" + str(random.randint(69, 73)) + "/"
+        sensorValue += "Hydration," + str(random.randint(69, 73))
     if "bloodsugar" in clientMsg:
-        sensorValue += "Blood Sugar/" + str(random.randint(89, 93)) + "/"
+        sensorValue += "Blood Sugar," + str(random.randint(89, 93))
 
     return sensorValue
 
